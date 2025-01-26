@@ -1,4 +1,4 @@
-# NOTE: Patched for using miniz from ../miniz/
+# Pixelsuft miniz patch
 cmake_minimum_required(VERSION 3.12)
 
 project(libspng C)
@@ -13,7 +13,6 @@ set(SPNG_VERSION ${SPNG_MAJOR}.${SPNG_MINOR}.${SPNG_REVISION})
 option(ENABLE_OPT "Enable architecture-specific optimizations" ON)
 option(SPNG_SHARED "Build shared lib" ON)
 option(SPNG_STATIC "Build static lib" ON)
-option(BUILD_EXAMPLES "Build examples" ON)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
@@ -36,11 +35,6 @@ set(spng_SOURCES spng/spng.c ../miniz/miniz.c)
 if(SPNG_SHARED)
     add_library(spng SHARED ${spng_SOURCES})
     list(APPEND spng_TARGETS spng)
-
-    if(BUILD_EXAMPLES)
-        add_executable(example examples/example.c)
-        target_link_libraries(example PRIVATE spng)
-    endif()
 endif()
 
 if(SPNG_STATIC)

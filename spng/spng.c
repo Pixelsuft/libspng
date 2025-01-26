@@ -6,7 +6,6 @@
 
 #include <limits.h>
 #include <string.h>
-#include <stdio.h>
 #include <math.h>
 
 #define ZLIB_CONST
@@ -1209,7 +1208,7 @@ static int spng__inflate_init(spng_ctx *ctx, int window_bits)
     if(inflateValidate(&ctx->zstream, validate)) return SPNG_EZLIB_INIT;
 
 #else /* This requires zlib >= 1.2.11 */
-    #pragma message ("inflateValidate() not available, SPNG_CTX_IGNORE_ADLER32 will be ignored")
+    // #pragma message ("inflateValidate() not available, SPNG_CTX_IGNORE_ADLER32 will be ignored")
 #endif
 
     return 0;
@@ -4875,19 +4874,6 @@ int spng_encode_image(spng_ctx *ctx, const void *img, size_t len, int fmt, int f
     return 0;
 }
 
-spng_ctx *spng_ctx_new(int flags)
-{
-    struct spng_alloc alloc =
-    {
-        .malloc_fn = malloc,
-        .realloc_fn = realloc,
-        .calloc_fn = calloc,
-        .free_fn = free
-    };
-
-    return spng_ctx_new2(&alloc, flags);
-}
-
 spng_ctx *spng_ctx_new2(struct spng_alloc *alloc, int flags)
 {
     if(alloc == NULL) return NULL;
@@ -5099,15 +5085,6 @@ int spng_set_png_stream(spng_ctx *ctx, spng_rw_fn *rw_func, void *user)
     ctx->streaming = 1;
 
     return 0;
-}
-
-int spng_set_png_file(spng_ctx *ctx, FILE *file)
-{
-    if(file == NULL) return 1;
-
-    if(ctx->encode_only) return spng_set_png_stream(ctx, file_write_fn, file);
-
-    return spng_set_png_stream(ctx, file_read_fn, file);
 }
 
 void *spng_get_png_buffer(spng_ctx *ctx, size_t *len, int *error)
