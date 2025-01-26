@@ -1,4 +1,4 @@
-# Pixelsuft miniz patch
+# NOTE: Patched for using miniz from ../miniz/
 cmake_minimum_required(VERSION 3.12)
 
 project(libspng C)
