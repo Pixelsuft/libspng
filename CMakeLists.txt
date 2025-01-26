@@ -1,3 +1,4 @@
+# NOTE: Patched for using miniz from ../miniz/
 cmake_minimum_required(VERSION 3.12)
 
 project(libspng C)
@@ -29,7 +30,8 @@ endif()
 
 set(spng_TARGETS "")
 
-set(spng_SOURCES spng/spng.c)
+add_definitions(-DSPNG_USE_MINIZ=1)
+set(spng_SOURCES spng/spng.c ../miniz/miniz.c)
 
 if(SPNG_SHARED)
     add_library(spng SHARED ${spng_SOURCES})
@@ -47,13 +49,14 @@ if(SPNG_STATIC)
     list(APPEND spng_TARGETS spng_static)
 endif()
 
-find_package(ZLIB REQUIRED)
+
 foreach(spng_TARGET ${spng_TARGETS})
     target_include_directories(${spng_TARGET} PUBLIC
+$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../miniz>
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/spng>
       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     )
-    target_link_libraries(${spng_TARGET} PRIVATE ZLIB::ZLIB)
+    
     target_link_libraries(${spng_TARGET} PRIVATE ${MATH_LIBRARY})
 endforeach()
 
