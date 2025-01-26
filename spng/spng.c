@@ -5007,30 +5007,6 @@ static int buffer_read_fn(spng_ctx *ctx, void *user, void *data, size_t n)
     return 0;
 }
 
-static int file_read_fn(spng_ctx *ctx, void *user, void *data, size_t n)
-{
-    FILE *file = user;
-    (void)ctx;
-
-    if(fread(data, n, 1, file) != 1)
-    {
-        if(feof(file)) return SPNG_IO_EOF;
-        else return SPNG_IO_ERROR;
-    }
-
-    return 0;
-}
-
-static int file_write_fn(spng_ctx *ctx, void *user, void *data, size_t n)
-{
-    FILE *file = user;
-    (void)ctx;
-
-    if(fwrite(data, n, 1, file) != 1) return SPNG_IO_ERROR;
-
-    return 0;
-}
-
 int spng_set_png_buffer(spng_ctx *ctx, const void *buf, size_t size)
 {
     if(ctx == NULL || buf == NULL) return 1;
